@@ -1,0 +1,88 @@
+name: IW4x
+
+# Build the reporter that ships with IW4x (see crash-reporter/ in
+# iw4x-rawfiles): the Windows build, and the Linux build that IW4x starts
+# instead when running under Wine.
+#
+# This is separate from ci.yml, which only runs on upstream's branches, so
+# that merging upstream doesn't conflict with it.
+
+on:
+  push:
+    branches:
+      - iw4x
+  pull_request:
+    types: [opened, synchronize, reopened]
+    branches:
+      - iw4x
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+env:
+  STEP_TIMEOUT_MINUTES: 60
+
+jobs:
+  build:
+    strategy:
+      fail-fast: false
+      matrix:
+       include:
+         - os: windows-2025
+           rid: win-x64
+           binary: Sentry.CrashReporter.exe
+         - os: ubuntu-24.04
+           rid: linux-x64
+           binary: Sentry.CrashReporter
+
+    name: Build (${{ matrix.rid }})
+
+    runs-on: ${{ matrix.os }}
+    steps:
+      - uses: actions/checkout@9c091bb21b7c1c1d1991bb908d89e4e9dddfe3e0 # v7.0.0
+        with:
+          fetch-depth: 0
+
+      - name: Install Dependencies
+        timeout-minutes: ${{ fromJSON(env.STEP_TIMEOUT_MINUTES) }}
+        uses: "./.github/steps/install_dependencies"
+        with:
+          target-platform: "desktop"
+
+      - name: Build Sentry.CrashReporter (Release)
+        shell: pwsh
+        run: dotnet publish -f net10.0-desktop -r ${{ matrix.rid }} ./Sentry.CrashReporter/Sentry.CrashReporter.csproj -o ./build
+
+      # The build is a single file, which is what goes into iw4x-rawfiles.
+      # Note that the artifact doesn't keep the file mode, so the Linux
+      # build has to be made executable again once downloaded.
+      #
+      - name: Upload Artifacts
+        uses: actions/upload-artifact@043fb46d1a93c77aae656e7c1c64a875d1fc6a0a # v7.0.1
+        with:
+          name: crash-reporter-${{ matrix.rid }}
+          path: ./build/${{ matrix.binary }}
+          if-no-files-found: error
+
+  unit_test:
+    name: Unit Tests
+    runs-on: ubuntu-24.04
+    steps:
+      - uses: actions/checkout@9c091bb21b7c1c1d1991bb908d89e4e9dddfe3e0 # v7.0.0
+        with:
+          fetch-depth: 0
+
+      - name: Install Dependencies
+        timeout-minutes: ${{ fromJSON(env.STEP_TIMEOUT_MINUTES) }}
+        uses: "./.github/steps/install_dependencies"
+        with:
+          target-platform: "desktop"
+
+      - name: Build Sentry.CrashReporter.Tests (Release)
+        shell: pwsh
+        run: dotnet build ./tests/Sentry.CrashReporter.Tests/Sentry.CrashReporter.Tests.csproj /p:Configuration=Release /p:OverrideTargetFramework=net10.0
+
+      - name: Run Unit Tests
+        shell: pwsh
+        run: dotnet test ./tests/Sentry.CrashReporter.Tests/Sentry.CrashReporter.Tests.csproj --no-build -c Release --logger GitHubActions
