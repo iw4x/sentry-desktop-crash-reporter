@@ -8,7 +8,7 @@
         <UseSystemResourceKeys>false</UseSystemResourceKeys>
 
         <!-- Display name -->
-        <ApplicationTitle>Sentry Crash Reporter</ApplicationTitle>
+        <ApplicationTitle>IW4x Crash Reporter</ApplicationTitle>
         <!-- App Identifier -->
         <ApplicationId>io.sentry.CrashReporter</ApplicationId>
         <!-- Versions -->

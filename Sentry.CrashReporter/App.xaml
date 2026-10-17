@@ -10,24 +10,24 @@
                 <ResourceDictionary Source="ms-appx:///Styles/Images.xaml" />
             </ResourceDictionary.MergedDictionaries>
 
-            <Color x:Key="SystemAccentColor">#8866FF</Color>
-            <Color x:Key="SystemAccentColorLight1">#9C7FFF</Color>
-            <Color x:Key="SystemAccentColorLight2">#7554FF</Color>
-            <Color x:Key="SystemAccentColorLight3">#B08CFF</Color>
-            <Color x:Key="SystemAccentColorDark1">#7554FF</Color>
-            <Color x:Key="SystemAccentColorDark2">#5A3FCC</Color>
-            <Color x:Key="SystemAccentColorDark3">#3F2B99</Color>
+            <Color x:Key="SystemAccentColor">#89BD24</Color>
+            <Color x:Key="SystemAccentColorLight1">#9BC745</Color>
+            <Color x:Key="SystemAccentColorLight2">#79A620</Color>
+            <Color x:Key="SystemAccentColorLight3">#ACD166</Color>
+            <Color x:Key="SystemAccentColorDark1">#79A620</Color>
+            <Color x:Key="SystemAccentColorDark2">#608419</Color>
+            <Color x:Key="SystemAccentColorDark3">#455F12</Color>
 
             <SolidColorBrush x:Key="SystemAccentColorBrush" Color="{StaticResource SystemAccentColor}" />
-            <SolidColorBrush x:Key="AccentButtonForeground" Color="#FFFFFF" />
-            <SolidColorBrush x:Key="AccentButtonForegroundPointerOver" Color="#FFFFFF" />
-            <SolidColorBrush x:Key="AccentButtonForegroundPressed" Color="#FFFFFF" Opacity="0.9" />
-            <SolidColorBrush x:Key="AccentButtonForegroundDisabled" Color="#FFFFFF" Opacity="0.75" />
+            <SolidColorBrush x:Key="AccentButtonForeground" Color="#222226" />
+            <SolidColorBrush x:Key="AccentButtonForegroundPointerOver" Color="#222226" />
+            <SolidColorBrush x:Key="AccentButtonForegroundPressed" Color="#222226" Opacity="0.9" />
+            <SolidColorBrush x:Key="AccentButtonForegroundDisabled" Color="#222226" Opacity="0.75" />
 
-            <x:String x:Key="WindowTitle">Sentry Crash Reporter</x:String>
+            <x:String x:Key="WindowTitle">IW4x Crash Reporter</x:String>
             <x:Boolean x:Key="WindowClosable">True</x:Boolean>
-            <x:String x:Key="HeaderText">Report a Bug</x:String>
-            <x:String x:Key="HeaderDescription" xml:space="preserve"> </x:String>
+            <x:String x:Key="HeaderText">IW4x crashed</x:String>
+            <x:String x:Key="HeaderDescription">You can send this report to the IW4x developers to help them fix the problem. Nothing is sent unless you select Submit.</x:String>
             <x:String x:Key="CancelButton">Cancel</x:String>
             <x:String x:Key="SubmitButton">Submit</x:String>
 
