@@ -96,7 +96,7 @@ public sealed class HeaderView : ReactiveUserControl<HeaderViewModel>
     // Only a crash carries an exception (from the minidump, if nothing else),
     // except for a hang, which is reported as an exception of its own. The
     // rest are errors the game reported itself, such as a fatal error.
-    private static string? ToHeaderText(Envelope? envelope)
+    private static string ToHeaderText(Envelope? envelope)
     {
         var key = envelope is null
             ? "HeaderText"
@@ -106,7 +106,7 @@ public sealed class HeaderView : ReactiveUserControl<HeaderViewModel>
                 "AppHang" => "HangHeaderText",
                 _ => "HeaderText"
             };
-        return Application.Current.Resources[key] as string;
+        return Application.Current.Resources[key] as string ?? string.Empty;
     }
 
     private static string ToBrand(string? value)
