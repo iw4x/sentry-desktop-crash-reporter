@@ -45,7 +45,7 @@ public sealed class HeaderView : ReactiveUserControl<HeaderViewModel>
                         .Children(
                             new TextBlock()
                                 .Grid(0)
-                                .Text(StaticResource.Get<string>("HeaderText"))
+                                .Text(x => x.Binding(() => vm.Envelope).Convert(ToHeaderText))
                                 .Style(ThemeResource.Get<Style>("TitleTextBlockStyle")),
                             logo.Grid(1)),
                         new TextBlock()
@@ -91,6 +91,22 @@ public sealed class HeaderView : ReactiveUserControl<HeaderViewModel>
             ClipboardExtensions.SetText(versionText);
             _ = Toast.Show(logo, "Copied to clipboard", versionText);
         };
+    }
+
+    // Only a crash carries an exception (from the minidump, if nothing else),
+    // except for a hang, which is reported as an exception of its own. The
+    // rest are errors the game reported itself, such as a fatal error.
+    private static string? ToHeaderText(Envelope? envelope)
+    {
+        var key = envelope is null
+            ? "HeaderText"
+            : envelope.TryGetException()?.Type switch
+            {
+                null => "ErrorHeaderText",
+                "AppHang" => "HangHeaderText",
+                _ => "HeaderText"
+            };
+        return Application.Current.Resources[key] as string;
     }
 
     private static string ToBrand(string? value)
